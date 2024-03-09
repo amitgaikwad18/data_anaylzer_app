@@ -40,9 +40,9 @@ def main():
         replaceNull = st.checkbox("Replace Missing values", value=False, label_visibility="visible")
 
         if replaceNull:
-            selected_cols = st.multiselect("Select columns to replace null", df.columns, placeholder="Choose columns", label_visibility="visible")
+            selected_cols = st.multiselect("Select columns to replace null", df.select_dtypes(include=["float","int"]).columns, placeholder="Choose columns", label_visibility="visible")
 
-            replaceMthd = st.selectbox('Replace Missing Data Using...', ('Mean', 'Median', 'Mode'), placeholder="Select method...", index=None)
+            replaceMthd = st.selectbox('Replace Missing Data Using...', ('Mean', 'Median', 'Mode',"Other"), placeholder="Select method...", index=None)
 
             for col in selected_cols:
 
@@ -55,13 +55,19 @@ def main():
                 if replaceMthd == "Mode":
                     df[col].fillna(value=round(df[col].mode().iat[0]), inplace=True)
 
+                if replaceMthd == "Other":
+                    other = st.number_input("Other",value=None,label_visibility="visible")
+
+                    if other:
+                        df[col].fillna(value=other, inplace=True)
+
             st.dataframe(df)
 
         createDummy = st.checkbox("Create dummy Variables", value=False, label_visibility="visible")
 
         if createDummy:
             # User input for creating dummy variables
-            selected_column = st.selectbox("Select a column for dummy variables", df.columns, placeholder="Choose one...", index=None)
+            selected_column = st.selectbox("Select a column for dummy variables", df.select_dtypes(exclude=["float","int"]).columns, placeholder="Choose one...", index=None)
 
             if selected_column:
 
