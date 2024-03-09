@@ -9,8 +9,9 @@ import random
 
 
 def main():
-    # st.set_page_config(layout="wide") 
-    st.title("KMeans Clustering...")
+    # st.set_page_config(layout="wide")
+    st.set_page_config(page_title="Data Analyzer")
+    st.title("Data Analyzer")
     
     
     # File uploader widget
