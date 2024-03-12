@@ -10,13 +10,16 @@ import random
 
 def main():
     # st.set_page_config(layout="wide")
-    st.set_page_config(page_title="Data Analyzer")
+    # app_icon = st.image("C:\\Users\\amitg\\Downloads\\app_logo.png")
+    st.set_page_config(page_title="Data Analyzer", page_icon=":pear:")
     st.title("Data Analyzer")
+    
+    left,right = st.columns(2)
     
     
     # File uploader widget
     uploaded_file = st.file_uploader("Upload a CSV file", type=["csv"])
-
+ 
     if uploaded_file:
         st.write("Filename:", uploaded_file.name)
 
@@ -111,7 +114,8 @@ def main():
                     if numOfClusters:
                         kmeans = KMeans(n_clusters=numOfClusters,random_state=42).fit(filtered_df)
                                     # df["Cluster"] = kmeans.labels_
-                        st.write("Silhouette Score: ", round(silhouette_score(filtered_df,kmeans.labels_),5))
+                        # st.write("Silhouette Score: ", round(silhouette_score(filtered_df,kmeans.labels_),5))
+                        st.metric(label="Silhouette Score",value=round(silhouette_score(filtered_df,kmeans.labels_),5))
                         # plt.style.use
 
                         fig, ax = plt.subplots()
@@ -130,6 +134,10 @@ def main():
                         for sum in kmeans_all.cluster_centers_:
                             summary_df.append(sum)
                         st.dataframe(pd.DataFrame(summary_df, columns=df.columns))
+
+                        df["Clusters"] = kmeans.labels_
+                        st.header("Assigned Clusters")
+                        st.write(df)
                 
             with tab2:
                 box_columns = st.multiselect("Select columns to create Boxplot", df.columns, placeholder="Choose columns", label_visibility="visible")
